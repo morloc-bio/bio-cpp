@@ -1,0 +1,6 @@
+--' The bio test suite against bio-cpp
+module test-bio-cpp (test, testReference)
+
+import bio.test (test, testReference)
+import bio-cpp
+import stream-cpp

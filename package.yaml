@@ -1,0 +1,15 @@
+name: bio-cpp
+version: 0.1.0
+homepage: null
+synopsis: C++ implementations of the bio readers, writers and coordinate mappings
+description: Implements the functions specified by bio in C++, with gzip support through zlib.
+category: bioinformatics
+license: MIT
+author: "Zebulun Arendsee"
+maintainer: "z@morloc.io"
+github: null
+bug-reports: null
+cxx-flags: ["-lz"]
+expose:
+  cpp:
+    - bio.hpp

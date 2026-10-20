@@ -1,0 +1,102 @@
+--' C++ implementations of the functions bio specifies
+module bio-cpp (*)
+
+import bio
+import root-cpp
+import vector-cpp
+
+type Cpp => Genome = "BioGenome"
+type Cpp => Transcript = "BioTranscript"
+data Cpp => Strand = "BioStrand"
+data Cpp => Orient = "BioOrient"
+record Cpp => Segment = "BioSegment"
+record Cpp => (Loc k) = "BioLoc<$1>" k
+record Cpp => Block = "BioBlock"
+record Cpp => (Mapping a b) = "BioMapping<$1,$2>" a b
+data Cpp => (Piece k) = "BioPiece<$1>" k
+record Cpp => (Sequence a s) = "BioSequence<$1,$2>" a s
+record Cpp => BaseQual = "BioBaseQual"
+record Cpp => (Feature n) = "BioFeature<$1>" n
+record Cpp => (Root s n) = "BioRoot<$1,$2>" s n
+record Cpp => GffNode = "BioGffNode"
+record Cpp => GtfLine = "BioGtfLine"
+record Cpp => Bed3 = "BioBed3"
+record Cpp => Bed6 = "BioBed6"
+record Cpp => Bed12 = "BioBed12"
+record Cpp => TxModel = "BioTxModel"
+data Cpp => Phase = "BioPhase"
+record Cpp => Cds = "BioCds"
+record Cpp => GeneTx = "BioGeneTx"
+record Cpp => Gene = "BioGene"
+record Cpp => Complexity = "BioComplexity"
+data Cpp => GffEntry = "BioGffEntry"
+record Cpp => TxGene = "BioTxGene"
+record Cpp => RefModels = "BioRefModels"
+data Cpp => LibStrand = "BioLibStrand"
+data Cpp => Layout = "BioLayout"
+
+source Cpp from "bio.hpp"
+  ( "bio_tiled" as tiled
+  , "bio_invert" as invert
+  , "bio_compose_blocks" as composeBlocks
+  , "bio_project" as project
+  , "bio_project_many" as projectMany
+  , "bio_extract" as extract
+  , "bio_extract_blocks" as extractBlocks
+  , "bio_transcript_models" as transcriptModels
+  , "bio_attr_values" as attrValues
+  , "bio_gff_entries" as gffEntries
+  , "bio_entry_roots" as entryRoots
+  , "bio_entry_seqid" as entrySeqid
+  , "bio_read_fastq_pairs" as readFastqPairs
+  , "bio_write_fastq_pairs" as writeFastqPairs
+  , "bio_read_gtf_filtered" as readGtfFiltered
+  , "bio_fasta_names" as fastaNames
+  , "bio_write_transcript_fasta" as writeTranscriptFasta
+  , "bio_write_transcript_fasta_pull" as writeTranscriptFastaPullNative
+  , "bio_write_fasta_pull" as writeFastaPullNative
+  , "bio_read_gtf_lines" as readGtfLines
+  , "bio_gtf_trees" as gtfTrees
+  , "bio_filter_gtf_lines" as filterGtfLines
+  , "bio_tx_genes" as txGenes
+  , "bio_open_pairs" as openPairs
+  , "bio_next_pairs" as nextPairsNative
+  , "bio_open_reads" as openReads
+  , "bio_next_reads" as nextReadsNative
+  , "bio_ref_models" as refModels
+  , "bio_project_point" as projectPoint
+  , "bio_format_fasta" as formatFasta
+  , "bio_format_fastq" as formatFastq
+  , "bio_format_bed3" as formatBed3
+  , "bio_format_bed6" as formatBed6
+  , "bio_format_bed12" as formatBed12
+  , "bio_format_gff3" as formatGff3
+  , "bio_format_gtf" as formatGtf
+  , "bio_append_text" as appendText
+  , "bio_reset_file" as resetFile
+  )
+
+compose ab bc
+  ? .dst ab == .src bc = Ok (composeBlocks ab bc)
+  : Err "compose: the mappings do not share a middle sequence"
+
+instance StreamFormattable (Fasta FastaEntry) where
+  source Cpp from "bio.hpp" ("bio_read_fasta" as readFormat, "bio_write_fasta" as writeFormat)
+
+instance StreamFormattable (Fastq FastqEntry) where
+  source Cpp from "bio.hpp" ("bio_read_fastq" as readFormat, "bio_write_fastq" as writeFormat)
+
+instance StreamFormattable (Gff3 (Root Str GffNode)) where
+  source Cpp from "bio.hpp" ("bio_read_gff3" as readFormat, "bio_write_gff3" as writeFormat)
+
+instance StreamFormattable (Gtf (Root Str GffNode)) where
+  source Cpp from "bio.hpp" ("bio_read_gtf" as readFormat, "bio_write_gtf" as writeFormat)
+
+instance StreamFormattable (Bed Bed3) where
+  source Cpp from "bio.hpp" ("bio_read_bed3" as readFormat, "bio_write_bed3" as writeFormat)
+
+instance StreamFormattable (Bed Bed6) where
+  source Cpp from "bio.hpp" ("bio_read_bed6" as readFormat, "bio_write_bed6" as writeFormat)
+
+instance StreamFormattable (Bed Bed12) where
+  source Cpp from "bio.hpp" ("bio_read_bed12" as readFormat, "bio_write_bed12" as writeFormat)
